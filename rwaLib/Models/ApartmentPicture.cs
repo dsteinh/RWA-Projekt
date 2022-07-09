@@ -13,5 +13,7 @@ namespace rwaLib.Models
         public string Base64Content { get; set; }
         public string Name { get; set; }
         public bool IsRepresentative { get; set; }
+
+        public override string ToString() => $"{Name}";
     }
 }

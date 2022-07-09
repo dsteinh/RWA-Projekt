@@ -16,7 +16,7 @@
                 <div class="col-md-6">
 
                     <img style="width: 150px; height: 150px; object-fit: cover;"
-                         src="@Html.DisplayFor(modelItem => item.ApartmentPictures.LastOrDefault().Base64Content)"
+                         src="@Html.DisplayFor(modelItem => item.ApartmentPictures.ToList().Single(p => p.IsRepresentative == true).Base64Content)"
                          alt="">
 
                 </div>

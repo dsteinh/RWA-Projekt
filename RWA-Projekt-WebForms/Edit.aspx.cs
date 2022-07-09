@@ -57,6 +57,7 @@ namespace RWA_Projekt_WebForms
             LoadApartmentPictures();
             LoadUsedTags();
             LoadTags();
+            
         }
 
         private void LoadTags()
@@ -75,6 +76,45 @@ namespace RWA_Projekt_WebForms
         {
             rptPictures.DataSource = _listOfApartmentPictures;
             rptPictures.DataBind();
+            ddlMainPhoto.DataSource = _listOfApartmentPictures;
+            ddlMainPhoto.DataBind();
+            if (_listOfApartmentPictures.Count == 0)
+            {
+                return;
+            }
+            if (ThereIsNoMainPhoto())
+            {
+                return;
+            }
+            
+            string bla = GetMainPhoto();
+            ddlMainPhoto.Items.FindByText(bla).Selected = true;
+        }
+
+        private bool ThereIsNoMainPhoto()
+        {
+            int.TryParse(_apartmentId, out int apId);
+            if (_listOfApartmentPictures.Count == 1)
+            {
+                ddlMainPhoto.Items[0].Selected = true;
+                ((DBRepo)Application["database"]).MakeMainPhoto(ddlMainPhoto.Items[0].Text, apId);
+                return true;
+            }
+            foreach (var p in _listOfApartmentPictures)
+            {
+                if (p.IsRepresentative)
+                {
+                    return false;
+                }
+                
+            }
+            return true;
+        }
+
+        private string GetMainPhoto()
+        {
+            int.TryParse(_apartmentId, out int apId);
+            return ((DBRepo)Application["database"]).SelectMainPhoto(apId);
         }
 
         private void LoadReservation()
@@ -201,6 +241,13 @@ namespace RWA_Projekt_WebForms
             int.TryParse(_apartmentId, out int apId);
             ((DBRepo)Application["database"]).AddTagToApartment(tag, apId);
             ReloadPage();
+        }
+
+        protected void ddlMainPhoto_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedValue = ddlMainPhoto.SelectedValue;
+            int.TryParse(_apartmentId, out int apId);
+            ((DBRepo)Application["database"]).MakeMainPhoto(selectedValue, apId);
         }
     }
 }

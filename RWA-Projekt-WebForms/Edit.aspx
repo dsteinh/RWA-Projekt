@@ -108,6 +108,10 @@
                     </div>
                     <fieldset class="p-4">
                         <legend>Edit Pictures</legend>
+                        <div class="mb-3">
+                            <asp:Label ID="lblMainPhoto" for="ddlMainPhoto" class="form-label" runat="server" Text="Select main photo"></asp:Label>
+                            <asp:DropDownList ID="ddlMainPhoto" AutoPostBack="True" class="form-control" runat="server" OnSelectedIndexChanged="ddlMainPhoto_SelectedIndexChanged"></asp:DropDownList>
+                        </div>
                         <div class="container">
                             <asp:Repeater ID="rptPictures" runat="server" OnItemCommand="DeletePicture_ItemCommand">
                                 <HeaderTemplate>
@@ -124,6 +128,7 @@
                                 <ItemTemplate>
                                     <tr>
                                         <%--<%#Eval(nameof(rwaLib.Models.ApartmentPicture.Base64Content))%>--%>
+                                        <td><%#Eval(nameof(rwaLib.Models.ApartmentPicture.Name)) %></td>
                                         <td>
                                             <asp:Image ID="Image1" CssClass="img-thumbnail" Width="307" Height="240" src='<%#$"{Eval(nameof(rwaLib.Models.ApartmentPicture.Base64Content))}"%>' runat="server" />
                                         </td>

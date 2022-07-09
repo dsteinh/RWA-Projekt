@@ -27,10 +27,10 @@ namespace rwaLib.Dal
                     {
                         Id = (int)row[nameof(Tag.Id)],
                         NameEng = row[nameof(Tag.NameEng)].ToString(),
-                        Type = new TagType {TypeId = Convert.ToInt32(row[nameof(TagType.TypeId)]), TypeName = row[nameof(TagType.TypeName)].ToString()},
+                        Type = new TagType { TypeId = Convert.ToInt32(row[nameof(TagType.TypeId)]), TypeName = row[nameof(TagType.TypeName)].ToString() },
                         ApartmentsUsing = (int)row[nameof(Tag.ApartmentsUsing)]
                     }
-                ) ;
+                );
             }
 
             return tags;
@@ -39,7 +39,7 @@ namespace rwaLib.Dal
         public void DeleteApartmentById(int id)
         {
             SqlHelper.ExecuteNonQuery(APARTMENTS_CS, nameof(DeleteApartmentById), id);
-            
+
         }
 
         public IList<ApartmentOwner> LoadOwners()
@@ -54,7 +54,7 @@ namespace rwaLib.Dal
                     {
                         OwnerId = (int)row[nameof(ApartmentOwner.OwnerId)],
                         Name = row[nameof(ApartmentOwner.Name)].ToString(),
-                        
+
                     }
                 );
             }
@@ -76,6 +76,21 @@ namespace rwaLib.Dal
                 UserName = row[nameof(ApartmentReservation.UserName)].ToString(),
                 UserEmail = row[nameof(ApartmentReservation.UserEmail)].ToString(),
             };
+        }
+
+        public string SelectMainPhoto(int apId)
+        {
+            ApartmentPicture picture;
+            var tblImgs = SqlHelper.ExecuteDataset(APARTMENTS_CS, nameof(SelectMainPhoto), apId).Tables[0];
+            var row = tblImgs.Rows[0];
+            picture = new ApartmentPicture
+            {
+                Base64Content = row[nameof(ApartmentPicture.Base64Content)].ToString(),
+                Id = Convert.ToInt32(row[nameof(ApartmentPicture.Id)]),
+                IsRepresentative = Convert.ToBoolean(row[nameof(ApartmentPicture.IsRepresentative)]),
+                Name = row[nameof(ApartmentPicture.Name)].ToString()
+            };
+            return picture.Name;
         }
 
         public IList<Apartment> LoadApartmantsByStatus(string status)
@@ -157,7 +172,7 @@ namespace rwaLib.Dal
                         Id = (int)row[nameof(Tag.Id)],
                         NameEng = row[nameof(Tag.NameEng)].ToString(),
                         Type = new TagType { TypeId = Convert.ToInt32(row[nameof(TagType.TypeId)]), TypeName = row[nameof(TagType.TypeName)].ToString() },
-                        
+
                     }
                 );
             }
@@ -179,13 +194,18 @@ namespace rwaLib.Dal
                         Name = row[nameof(ApartmentPicture.Name)].ToString()
                         //IsRepresentative = (bool)row[nameof(ApartmentPicture.IsRepresentative)]
                     }
-                ) ;
+                );
             }
 
             return apartmentPictures;
         }
 
-        public void UpdateReservation(int id,string details, string regUser)
+        public void MakeMainPhoto(string imgName, int apId)
+        {
+            SqlHelper.ExecuteNonQuery(APARTMENTS_CS, nameof(MakeMainPhoto), imgName, apId);
+        }
+
+        public void UpdateReservation(int id, string details, string regUser)
         {
             SqlHelper.ExecuteNonQuery(APARTMENTS_CS, nameof(UpdateReservation), id, details, regUser, DBNull.Value, DBNull.Value);
         }
@@ -198,7 +218,7 @@ namespace rwaLib.Dal
         public void CreateTag(string name, string type)
         {
             SqlHelper.ExecuteDataset(APARTMENTS_CS, nameof(CreateTag), name, type, Guid.NewGuid());
-            
+
         }
 
         public IList<TagType> LoadTagTypes()
@@ -210,7 +230,7 @@ namespace rwaLib.Dal
                 tagTypes.Add(
                     new TagType
                     {
-                       TypeName = row[nameof(TagType.TypeName)].ToString(),
+                        TypeName = row[nameof(TagType.TypeName)].ToString(),
                     }
                 );
             }
@@ -265,7 +285,7 @@ namespace rwaLib.Dal
             }
 
             return reservations;
-           
+
         }
 
         public void AddTagToApartment(string tag, int apId)
@@ -321,7 +341,7 @@ namespace rwaLib.Dal
                 MaxChildren = Convert.ToInt32(row[nameof(Apartment.MaxChildren)]),
                 TotalRooms = Convert.ToInt32(row[nameof(Apartment.TotalRooms)]),
                 Price = Convert.ToDouble(row[nameof(Apartment.Price)]),
-                Owner = new ApartmentOwner {OwnerId = Convert.ToInt32(row[nameof(Apartment.Owner.OwnerId)]), Name = row[nameof(Apartment.Owner)].ToString() },
+                Owner = new ApartmentOwner { OwnerId = Convert.ToInt32(row[nameof(Apartment.Owner.OwnerId)]), Name = row[nameof(Apartment.Owner)].ToString() },
                 Status = row[nameof(Apartment.Status)].ToString(),
                 BeachDistance = Convert.ToInt32(row[nameof(Apartment.BeachDistance)])
             };
@@ -329,7 +349,7 @@ namespace rwaLib.Dal
 
         public void UpdateApartment(Apartment a)
         {
-            SqlHelper.ExecuteNonQuery(APARTMENTS_CS, nameof(UpdateApartment), a.Id, a.Name, a.Price,a.City.Id, a.Address, a.MaxAdults, a.MaxChildren, a.Status, a.TotalRooms, a.BeachDistance);
+            SqlHelper.ExecuteNonQuery(APARTMENTS_CS, nameof(UpdateApartment), a.Id, a.Name, a.Price, a.City.Id, a.Address, a.MaxAdults, a.MaxChildren, a.Status, a.TotalRooms, a.BeachDistance);
         }
 
         public IList<Apartment> LoadAllApartments()
@@ -353,7 +373,7 @@ namespace rwaLib.Dal
                         Owner = new ApartmentOwner { OwnerId = Convert.ToInt32(row[nameof(Apartment.Owner.OwnerId)]), Name = row[nameof(Apartment.Owner)].ToString() },
                         Status = row[nameof(Apartment.Status)].ToString(),
                         BeachDistance = Convert.ToInt32(row[nameof(Apartment.BeachDistance)]),
-                        
+
 
                     }
                 );
@@ -422,6 +442,6 @@ namespace rwaLib.Dal
             return users;
         }
 
-       
+
     }
 }
