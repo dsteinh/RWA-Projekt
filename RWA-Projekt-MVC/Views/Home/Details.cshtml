@@ -1,0 +1,262 @@
+﻿@model RWA_Projekt_MVC.Models.Apartment
+
+@{
+    ViewBag.Title = "Details";
+    var comments = (IEnumerable<RWA_Projekt_MVC.Models.ApartmentReview>)ViewBag.Comments;
+    var ratingSum = ViewBag.RatingSum;
+    var ratingCount = ViewBag.RatingCount;
+
+    decimal rating = 0;
+    if (ratingCount > 0)
+    {
+        rating = (ratingSum / ratingCount);
+    }
+    var totalRating = decimal.Parse(rating.ToString());
+
+}
+<style>
+    .commentBox {
+        background-color: #efefef;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .starFade {
+        background-image: url('../../Images/StarFade.gif');
+        min-width: 30px;
+        min-height: 30px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .starFadeN {
+        background-image: url('../../Images/StarFade.gif');
+        min-width: 30px;
+        min-height: 30px;
+        display: inline-block;
+    }
+
+    .starGlow {
+        background-image: url('../../Images/StarGlow.gif');
+        min-width: 30px;
+        min-height: 30px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .starGlowN {
+        background-image: url('../../Images/StarGlow.gif');
+        min-width: 30px;
+        min-height: 30px;
+        display: inline-block;
+    }
+
+    .chip {
+        display: inline-block;
+        padding: 0 25px;
+        height: 50px;
+        font-size: 16px;
+        line-height: 50px;
+        border-radius: 25px;
+        background-color: #f1f1f1;
+    }
+</style>
+<div>
+    <span class="starFadeN" id="sRate1"></span><span class="starFadeN" id="sRate2"></span><span class="starFadeN" id="sRate3"></span><span class="starFadeN" id="sRate4"></span><span class="starFadeN" id="sRate5"></span>
+</div>
+
+<h2>Details</h2>
+
+<div class="container ">
+    <div class="d-flex gap-md-5">
+        <h4>
+            @Html.DisplayFor(model => model.Name)
+        </h4>
+        @if (Model.ApartmentStatus.Name == "Slobodno" || Model.ApartmentStatus.NameEng == "Vacant")
+        {
+            <div class="ms-auto">
+
+                <p class="card-text">
+                    @Html.ActionLink("Reserve", "Reserve", "Home", routeValues: new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-outline-primary float-right" })
+                </p>
+
+            </div>}
+        else
+        {
+            <div class="ms-auto">
+
+                <p class="card-text">
+                    <span class="alert-warning">
+                        Can't be reserved at this time
+                    </span>
+                </p>
+
+            </div>
+        }
+
+
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-6">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.City)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.City.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CreatedAt)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CreatedAt)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ApartmentOwner)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ApartmentOwner.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ApartmentStatus)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ApartmentStatus.NameEng)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Address)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Address)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Price)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Price)<span>kn</span>
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.MaxAdults)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.MaxAdults)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.MaxChildren)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.MaxChildren)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.TotalRooms)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.TotalRooms)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.BeachDistance)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.BeachDistance)<span>m</span>
+                </dd>
+
+            </dl>
+        </div>
+        <div class="col-6">
+            <div class="container">
+                <h3>Tags</h3>
+                @foreach (var item in Model.TaggedApartments)
+                {
+                    <span class="chip m-1">@Html.DisplayName(item.Tag.Name)</span>
+                }
+            </div>
+            <div class="container">
+                <h3>Comments</h3>
+                @foreach (var c in comments)
+                {
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <b>@c.AspNetUser.UserName</b>
+                            <br />
+                            <i>@c.CreatedAt</i>
+                            <br />
+                            @for (int i = 1; i <= c.Stars; i++)
+                            {
+                                <span class="starGlowN"></span>
+                            }
+                            @for (int i = (int)c.Stars + 1; i <= 5; i++)
+                            {
+                                <span class="starFadeN"></span>
+                            }
+                        </div>
+                        <div class="col-md-9">
+                            @Html.Raw(c.Details?.Replace("\n", "<br/>"))
+                        </div>
+                    </div>
+                }
+                @if (Request.IsAuthenticated)
+                {
+
+                    @Html.Partial("_CommentBox")
+                }
+                else
+                {
+                    <span class="alert-warning">
+                        You must be Logged In to write a review
+                    </span>
+                }
+            </div>
+        </div>
+    </div>
+    <fieldset class="container p-4">
+        <legend>Pictures</legend>
+        <div class="d-flex gap-2 flex-wrap">
+            @foreach (var item in Model.ApartmentPictures)
+            {
+                if (item.DeletedAt == null)
+                {
+                    <a class="fancy-photo"
+                       href="@item.Base64Content"
+                       rel="group">
+                        <img style="width: 300px; height: 337px; object-fit: cover;" src="@item.Base64Content" class="img-thumbnail" alt="...">
+                    </a>
+                }
+            }
+        </div>
+    </fieldset>
+
+
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script>
+    function SCRate() {
+        for (var i = 1; i <= @totalRating; i++) {
+            $("#sRate" + i).attr('class', 'starGlowN');
+        }
+    }
+    $(function(){
+        SCRate();
+    });
+</script>

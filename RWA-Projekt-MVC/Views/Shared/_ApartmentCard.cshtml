@@ -1,0 +1,41 @@
+﻿@model IEnumerable<RWA_Projekt_MVC.Models.Apartment>
+@foreach (var item in Model)
+{
+    <div class="col-md-4 col-xs-6 col-md-3 border-primary mb-3">
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card-header text-black bg-light">
+                        <p class="card-text">
+                            <h5 class="card-title">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </h5>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <img style="width: 150px; height: 150px; object-fit: cover;"
+                         src="@Html.DisplayFor(modelItem => item.ApartmentPictures.LastOrDefault().Base64Content)"
+                         alt="">
+
+                </div>
+                <div class="col-6">
+                    <div class="card-body">
+                        <p class="card-text"><b>@Html.DisplayFor(modelItem => item.City.Name)</b> </p>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.ApartmentStatus.Name)</p>
+                        <p class="card-text"><b>Total Rooms: </b> <br /> @Html.DisplayFor(modelItem => item.TotalRooms)</p>
+                        <p class="card-text"><b>Price: </b> <br /> @Html.DisplayFor(modelItem => item.Price)</p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card-footer ">
+                        <p class="card-text">
+                            @Html.ActionLink("Show Details", "Details", "Home", routeValues: new { id = item.Id }, htmlAttributes: new { @class = "btn btn-outline-primary float-right" })
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

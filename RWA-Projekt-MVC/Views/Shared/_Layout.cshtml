@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body class="pt-0">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+        <a class="navbar-brand" href="#"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    @Html.ActionLink("Home", "Index", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("About", "About", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link" })
+                </li>
+
+                <li class="nav-item">
+                    @Html.ActionLink("Contact", "Contact", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link" })
+                </li>
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
+    </nav>
+
+    <div class="container body-content p-4">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>RWA-Projekt-UserPage @DateTime.Now.Year &copy;</p>
+        </footer>
+    </div>
+
+    <link rel="stylesheet"
+          href="/Content/jquery.fancybox.css"
+          type="text/css"
+          media="screen" />
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript"
+            src="/Scripts/jquery.fancybox.pack.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".fancy-photo").fancybox({
+                cyclic: true,
+                onUpdate: function () {
+                    $(".fancybox-nav span").css({
+                        visibility: "visible"
+                    });
+                    return;
+                },
+                afterClose: function () {
+                    $(".fancybox-nav span").css({
+                        visibility: "hidden"
+                    });
+                    return;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
