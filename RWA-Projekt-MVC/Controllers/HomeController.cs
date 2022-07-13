@@ -20,6 +20,13 @@ namespace RWA_Projekt_MVC.Controllers
 
         public ActionResult Index()
         {
+            //if (HttpContext.Request.Cookies["sort"] != null)
+            //{
+            //    HttpCookie cookie = HttpContext.Request.Cookies.Get("sort");
+            //    return RedirectToAction("GetSortRecord", "Home", new { SortType = cookie.Value });
+
+            //}
+            
 
             return View(context);
         }
@@ -191,7 +198,10 @@ namespace RWA_Projekt_MVC.Controllers
         public ActionResult GetSortRecord(string SortType)
         {
             List<Apartment> ApaList = context.Apartments.ToList();
-
+            HttpCookie cookie = new HttpCookie("sort");
+            cookie.Value = SortType;
+            HttpContext.Response.Cookies.Remove("sort");
+            HttpContext.Response.SetCookie(cookie);
             switch (SortType)
             {
                 case "asc":

@@ -1,5 +1,30 @@
 ﻿@model IEnumerable<RWA_Projekt_MVC.Models.Apartment>
-@foreach (var item in Model)
+@using RWA_Projekt_MVC.Models
+@{
+    var cookieValue = Request.Cookies["sort"];
+
+    List<Apartment> list = Model.ToList();
+    switch (cookieValue.Value)
+    {
+        case "asc":
+
+            list.Sort((a, b) => a.Price.CompareTo(b.Price));
+
+            break;
+        case "desc":
+            list.Sort((a, b) => -a.Price.CompareTo(b.Price));
+
+            break;
+        default:
+            list.Sort((a, b) => a.Id.CompareTo(b.Id));
+
+            break;
+    }
+    ViewBag.List = list;
+
+}
+
+@foreach (var item in (List<Apartment>)ViewBag.List)
 {
     <div class="col-md-4 col-xs-6 col-md-3 border-primary mb-3">
         <div class="card mb-3" style="max-width: 540px;">
