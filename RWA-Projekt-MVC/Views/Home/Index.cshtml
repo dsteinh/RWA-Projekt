@@ -1,5 +1,5 @@
 ﻿@model RWA_Projekt_MVC.Dal.RwaAparmentsContext
-
+@using RWA_Projekt_MVC.Models
 @{
     ViewBag.Title = "Index";
 }
@@ -19,7 +19,7 @@
     </fieldset>
     <div class="col">
         <label class="form-label p-0" for="test">City: </label>
-        @Html.DropDownList("Cities", new SelectList(Model.Cities, "Name", "Name").Append(new SelectListItem {  Text = "--SelectCity--", Value = "default" }), htmlAttributes: new { @class = "form-control", @id = "Region" })
+        @Html.DropDownList("Cities", new SelectList(Model.Cities, "Name", "Name").Append(new SelectListItem { Text = "--SelectCity--", Value = "default" }), htmlAttributes: new { @class = "form-control", @id = "Region" })
         <div class="btn-group pt-2" role="group" aria-label="Basic example">
             <button type="button" value="id" class="btn btn-secondary sort">Id</button>
             <button type="button" value="asc" class="btn btn-secondary sort">LowerPrice</button>
@@ -29,7 +29,7 @@
 </div>
 
 <div class="container p-4">
-    
+
 </div>
 <div id="DataSearching" class="row container">
 
@@ -59,7 +59,7 @@
         if (!searchtotalrooms) {
             searchtotalrooms = -1;
         }
-        
+
         $.ajax({
             type: "Post",
             url: "/Home/GetFilterRecord?TotalRooms=" + searchtotalrooms,
@@ -87,9 +87,9 @@
 </script>
 <script>
     $("#Region").change(function () {
-        
+
         var searchtext = $(this).val();
-        
+
 
         $.ajax({
             type: "Post",
@@ -103,10 +103,10 @@
 </script>
 <script>
     $(document).ready(function () {
-        
+
 
         $("#Region").val("default");
     });
-   
+
 </script>
 
